@@ -3,7 +3,7 @@
 import subprocess
 import sys
 from colorama import init
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from .colors import Colors
 from .commit_types import COMMIT_TYPES
@@ -41,11 +41,20 @@ def main() -> None:
         if TEST_MODE:
             print(Colors.SUCCESS + Messages.TEST_MODE_ACTIVE)
 
-        commit_type = get_commit_type()
-        scope = get_scope()
-        message = get_message()
-        breaking_change = get_breaking_change()
-        footer = get_footer()
+        current_state: Dict[str, Any] = {
+            'commit_type': '',
+            'scope': None,
+            'message': '',
+            'breaking_change': '',
+            'footer': None,
+            'emoji': ''
+        }
+
+        commit_type = get_commit_type(current_state)
+        scope = get_scope(current_state)
+        message = get_message(current_state)
+        breaking_change = get_breaking_change(current_state)
+        footer = get_footer(current_state)
 
         emoji = COMMIT_TYPES.get(commit_type)
         if not emoji:
