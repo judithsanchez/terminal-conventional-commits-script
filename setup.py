@@ -6,6 +6,12 @@ setup(
     packages=find_packages(),
     install_requires=[
         "colorama",
+        "prompt_toolkit>=3.0.0",
+    ],
+    scripts=[
+        'scripts/install.sh',
+        'scripts/install.bat',
+        'scripts/install.py'
     ],
     entry_points={
         "console_scripts": [

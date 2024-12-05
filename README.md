@@ -20,19 +20,21 @@ pip install conventional-commits
 
 
 # List all available commit types
-python -m conventional_commits.config_cli list
+python3 -m conventional_commits.config_cli list
 
 # Add a new commit type
-python -m conventional_commits.config_cli add "deploy" "🚀"
+python3 -m conventional_commits.config_cli add "deploy" "🚀"
 
 # Modify existing commit type
-python -m conventional_commits.config_cli modify "feat" "🌟"
+python3 -m conventional_commits.config_cli modify "feat" "🌟"
 
 # Remove unused commit type
-python -m conventional_commits.config_cli remove "wip"
+python3 -m conventional_commits.config_cli remove "wip"
 
 # Reset to default types
-python -m conventional_commits.config_cli reset
+python3 -m conventional_commits.config_cli reset
 
 
-python -m conventional_commits.commit testingthisPythonScript
+python3 -m conventional_commits.commit testingthisPythonScript
+
+

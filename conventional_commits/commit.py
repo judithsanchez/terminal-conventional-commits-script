@@ -6,7 +6,7 @@ from colorama import init
 from typing import Optional, Dict, Any
 
 from .colors import Colors
-from .commit_types import COMMIT_TYPES
+from .config.config_manager import ConfigManager
 from .messages import Messages
 from .message_formatter import format_commit_message, MessageFormatError
 from .input_handlers import (
@@ -50,13 +50,15 @@ def main() -> None:
             'emoji': ''
         }
 
+        config = ConfigManager()
         commit_type = get_commit_type(current_state)
         scope = get_scope(current_state)
         message = get_message(current_state)
         breaking_change = get_breaking_change(current_state)
         footer = get_footer(current_state)
 
-        emoji = COMMIT_TYPES.get(commit_type)
+        all_types = config.load_commit_types()
+        emoji = all_types.get(commit_type)
         if not emoji:
             raise CommitInputError(Messages.COMMIT_TYPE_ERROR.format(commit_type))
 
@@ -69,38 +71,23 @@ def main() -> None:
                 footer=footer,
                 emoji=emoji
             )
-        except MessageFormatError as e:
-            print(Colors.ERROR + Messages.FORMAT_ERROR.format(str(e)))
-            sys.exit(1)
 
-        print_divider()
-        print(Colors.SUCCESS + Messages.GENERATED_MESSAGE)
-        print(Colors.OUTPUT + f"> {formatted_message}")
-        print_divider()
-
-        confirm = input(Colors.INPUT + Messages.CONFIRM_PROMPT).strip().lower()
-
-        if confirm in ["q", "quit"]:
-            print(Colors.ERROR + Messages.PROCESS_EXIT)
-            sys.exit(0)
-        elif confirm in ["", "y", "yes"]:
             if TEST_MODE:
-                print(Colors.SUCCESS + Messages.TEST_SUCCESSFUL)
-                print(Colors.OUTPUT + f"'{formatted_message}'")
-            else:
-                if execute_git_commit(formatted_message):
-                    print(Colors.SUCCESS + Messages.COMMIT_SUCCESSFUL)
-                else:
-                    sys.exit(1)
-        else:
-            print(Colors.ERROR + Messages.COMMIT_ABORTED)
+                print(Colors.SUCCESS + Messages.TEST_MODE_MESSAGE.format(formatted_message))
+                return
 
+            if execute_git_commit(formatted_message):
+                print(Colors.SUCCESS + Messages.COMMIT_SUCCESS)
+
+        except MessageFormatError as e:
+            print(Colors.ERROR + str(e))
+
+    except CommitInputError as e:
+        print(Colors.ERROR + str(e))
     except KeyboardInterrupt:
-        print(Colors.ERROR + f"\n{Messages.PROCESS_INTERRUPTED}")
-        sys.exit(1)
+        print(Colors.WARNING + Messages.PROCESS_INTERRUPTED)
     except Exception as e:
         print(Colors.ERROR + Messages.UNEXPECTED_ERROR.format(str(e)))
-        sys.exit(1)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

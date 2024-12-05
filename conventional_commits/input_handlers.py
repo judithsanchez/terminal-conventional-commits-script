@@ -1,17 +1,15 @@
-import sys
+from typing     import Dict, Any, Optional
 import re
-from typing import Optional, Dict, Any
-from .colors import Colors
-from .config.default_types import COMMIT_TYPES
 from .messages import Messages
+from .colors import Colors
 from .message_formatter import preview_commit_message
+from .config.config_manager import ConfigManager
 
 class CommitInputError(Exception):
-    """Custom exception for commit input errors"""
     pass
 
 def print_divider():
-    print(Colors.DIVIDER + "-" * 40)
+    print("-" * 40)
 
 def show_current_preview(current_state: Dict[str, Any]):
     print_divider()
@@ -20,54 +18,62 @@ def show_current_preview(current_state: Dict[str, Any]):
     print(Colors.OUTPUT + f"> {preview}")
     print_divider()
 
-def handle_quit(input_value: str):
-    if input_value.lower() in ["q", "quit"]:
-        print(Colors.ERROR + Messages.PROCESS_EXIT)
-        sys.exit(0)
+def handle_quit(value: str):
+    if value.lower() == 'q':
+        print(Colors.SUCCESS + "Process exited.")
+        exit(0)
 
 def get_commit_type(current_state: Dict[str, Any]) -> str:
     try:
-        commit_types_list = list(COMMIT_TYPES.keys())
+        config = ConfigManager()
+        all_types = config.load_commit_types()
+        types_list = list(all_types.items())
         page_size = 10
+        total_pages = (len(types_list) + page_size - 1) // page_size
         current_page = 0
-        total_pages = (len(commit_types_list) + page_size - 1) // page_size
-
+        
         while True:
+            print_divider()
+            print(Colors.PROMPT + "Select a commit type (or type 'q' to quit):")
+            print_divider()
+            
             start_idx = current_page * page_size
-            end_idx = min(start_idx + page_size, len(commit_types_list))
-
-            print_divider()
-            print(Colors.PROMPT + Messages.COMMIT_TYPE_PROMPT)
-            print_divider()
-
-            for i, t in enumerate(commit_types_list[start_idx:end_idx], start_idx + 1):
-                print(Colors.INPUT + f"{i}. {t} {COMMIT_TYPES[t]}")
-
-            if current_page + 1 < total_pages:
-                print(Colors.INPUT + f"\n{Messages.MORE_OPTIONS}")
-
-            choice = input(Colors.INPUT + "\nEnter the number for the commit type: ").strip().lower()
+            end_idx = min(start_idx + page_size, len(types_list))
+            
+            for i, (type_name, emoji) in enumerate(types_list[start_idx:end_idx], start=start_idx + 1):
+                print(f"{i}. {type_name} {emoji}")
+            
+            print(f"\nPage {current_page + 1} of {total_pages}")
+            print("Press 'm' for next page, 'b' for previous page\n")
+            
+            choice = input(Colors.INPUT + "Enter the number for the commit type: ").strip().lower()
             handle_quit(choice)
-
-            if choice == 'm' and current_page + 1 < total_pages:
-                current_page += 1
+            
+            if choice == 'm':
+                current_page = (current_page + 1) % total_pages
                 continue
-
+            elif choice == 'b':
+                current_page = (current_page - 1) % total_pages
+                continue
+                
             try:
-                selected_type = commit_types_list[int(choice) - 1]
-                if selected_type not in COMMIT_TYPES:
-                    raise CommitInputError(Messages.COMMIT_TYPE_ERROR.format(selected_type))
-                current_state['commit_type'] = selected_type
-                current_state['emoji'] = COMMIT_TYPES[selected_type]
-                show_current_preview(current_state)
-                return selected_type
-            except (IndexError, ValueError):
-                print(Colors.ERROR + Messages.INVALID_CHOICE)
-
+                index = int(choice) - 1
+                if 0 <= index < len(types_list):
+                    commit_type = types_list[index][0]
+                    current_state['commit_type'] = commit_type
+                    current_state['emoji'] = all_types[commit_type]
+                    show_current_preview(current_state)
+                    return commit_type
+                else:
+                    raise CommitInputError(Messages.INVALID_CHOICE)
+            except ValueError:
+                raise CommitInputError(Messages.INVALID_CHOICE)
+                
+    except CommitInputError as e:
+        print(Colors.ERROR + str(e))
+        return get_commit_type(current_state)
     except Exception as e:
         print(Colors.ERROR + Messages.UNEXPECTED_ERROR.format(str(e)))
-        sys.exit(1)
-
 def get_scope(current_state: Dict[str, Any]) -> Optional[str]:
     try:
         scope = input(Colors.INPUT + Messages.SCOPE_PROMPT).strip()
