@@ -11,8 +11,8 @@ class Messages:
 
     # Success messages
     TEST_MODE_ACTIVE = "🧪 Running in test mode - no actual commits will be made"
-    COMMIT_SUCCESSFUL = "Commit successful!"
-    TEST_SUCCESSFUL = "✅ Test successful! This would have created a commit with message:"
+    COMMIT_SUCCESS = "Commit successful! 🎉"
+    TEST_SUCCESS = "✅ Test successful! This would have created a commit with message:"
     GENERATED_MESSAGE = "Generated commit message:"
 
     # Error messages

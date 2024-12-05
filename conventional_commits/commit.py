@@ -25,6 +25,10 @@ TEST_MODE = len(sys.argv) > 1 and sys.argv[1] == "testingthisPythonScript"
 
 def execute_git_commit(commit_message: str) -> bool:
     try:
+        # Add all changes first
+        subprocess.run(["git", "add", "."], check=True)
+        
+        # Then commit
         result = subprocess.run(["git", "commit", "-m", commit_message], 
                               capture_output=True, 
                               text=True)
