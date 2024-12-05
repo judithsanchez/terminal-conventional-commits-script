@@ -17,9 +17,9 @@ def preview_commit_message(
     
     if commit_type and emoji:
         if scope:
-            preview = f"{emoji}  {commit_type} ({scope})"
+            preview = f"{emoji}  {commit_type} ({scope})" + ("!" if breaking_change else "")
         else:
-            preview = f"{emoji}  {commit_type}"
+            preview = f"{emoji}  {commit_type}" + ("!" if breaking_change else "")
             
     if message:
         preview += f": {message}" if preview else message
@@ -45,9 +45,9 @@ def format_commit_message(
             raise MessageFormatError(Messages.MISSING_REQUIRED)
 
         if scope:
-            formatted_message = f"{emoji}  {commit_type} ({scope}): {message}"
+            formatted_message = f"{emoji}  {commit_type} ({scope})" + ("!" if breaking_change else "") + f": {message}"
         else:
-            formatted_message = f"{emoji}  {commit_type}: {message}"
+            formatted_message = f"{emoji}  {commit_type}" + ("!" if breaking_change else "") + f": {message}"
 
         if breaking_change:
             formatted_message += f"\n\n{breaking_change}"
