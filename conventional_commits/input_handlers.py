@@ -2,7 +2,7 @@ import sys
 import re
 from typing import Optional, Dict, Any
 from .colors import Colors
-from .commit_types import COMMIT_TYPES
+from .config.default_types import COMMIT_TYPES
 from .messages import Messages
 from .message_formatter import preview_commit_message
 
