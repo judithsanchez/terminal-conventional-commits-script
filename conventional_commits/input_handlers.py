@@ -2,7 +2,7 @@ from typing     import Dict, Any, Optional
 import re
 from .messages import Messages
 from .colors import Colors
-from .message_formatter import preview_commit_message
+from conventional_commits.formatters.preview_formatter import preview_commit_message
 from .config.config_manager import ConfigManager
 
 class CommitInputError(Exception):

@@ -8,7 +8,7 @@ from typing import Optional, Dict, Any, Tuple, List
 from .colors import Colors
 from .config.config_manager import ConfigManager
 from .messages import Messages
-from .message_formatter import format_commit_message, MessageFormatError, preview_commit_message
+from conventional_commits.formatters.commit_formatter import format_commit_message
 from .input_handlers import (
     print_divider,
     get_commit_type,
