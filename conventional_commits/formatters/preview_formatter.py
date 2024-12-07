@@ -1,5 +1,5 @@
-
 from typing import Optional
+import os
 
 def preview_commit_message(
     commit_type: str = "",
@@ -9,6 +9,9 @@ def preview_commit_message(
     breaking_change: Optional[str] = None,
     footer: Optional[str] = None
 ) -> str:
+    # Clear terminal before showing new preview
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
     preview = ""
     
     if commit_type and emoji:
