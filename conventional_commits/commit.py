@@ -40,6 +40,41 @@ def execute_git_commit(commit_message: str) -> bool:
         print(Colors.ERROR + Messages.GIT_ERROR.format(str(e)))
         return False
 
+def execute_git_push(force: bool = False) -> bool:
+    try:
+        if force:
+            result = subprocess.run(["git", "push", "--force-with-lease"], 
+                                  capture_output=True, 
+                                  text=True)
+        else:
+            result = subprocess.run(["git", "push"], 
+                                  capture_output=True, 
+                                  text=True)
+        
+        if result.returncode != 0:
+            print(Colors.ERROR + Messages.PUSH_ERROR.format(result.stderr))
+            return False
+        return True
+    except subprocess.SubprocessError as e:
+        print(Colors.ERROR + Messages.PUSH_ERROR.format(str(e)))
+        return False
+
+def confirm_and_execute(formatted_message: str) -> None:
+    confirm = input(Colors.INPUT + Messages.CONFIRM_COMMIT).strip().lower()
+    if confirm != 'y':
+        print(Colors.WARNING + Messages.PROCESS_INTERRUPTED)
+        return
+
+    if execute_git_commit(formatted_message):
+        print(Colors.SUCCESS + Messages.COMMIT_SUCCESS)
+        
+        # Ask about pushing
+        push_choice = input(Colors.INPUT + Messages.PUSH_PROMPT).strip().lower()
+        if push_choice in ('y', 'f'):
+            print(Colors.INFO + Messages.PUSHING_CHANGES)
+            if execute_git_push(force=push_choice == 'f'):
+                print(Colors.SUCCESS + Messages.PUSH_SUCCESS)
+
 def main() -> None:
     try:
         if TEST_MODE:
@@ -80,8 +115,7 @@ def main() -> None:
                 print(Colors.SUCCESS + Messages.TEST_MODE_MESSAGE.format(formatted_message))
                 return
 
-            if execute_git_commit(formatted_message):
-                print(Colors.SUCCESS + Messages.COMMIT_SUCCESS)
+            confirm_and_execute(formatted_message)
 
         except MessageFormatError as e:
             print(Colors.ERROR + str(e))
@@ -92,6 +126,5 @@ def main() -> None:
         print(Colors.WARNING + Messages.PROCESS_INTERRUPTED)
     except Exception as e:
         print(Colors.ERROR + Messages.UNEXPECTED_ERROR.format(str(e)))
-
 if __name__ == '__main__':
     main()

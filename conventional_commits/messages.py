@@ -8,12 +8,19 @@ class Messages:
     FOOTER_PROMPT = "Enter any additional footers (optional, press Enter to skip): "
     CONFIRM_PROMPT = "Do you want to proceed with this commit? (y/n, or 'q' to quit) [default: y]: "
     MORE_OPTIONS = "Press 'm' to see more options."
+    CONFIRM_COMMIT = "Do you want to proceed with this commit? (y/n): "
+    PUSH_PROMPT = "Would you like to push changes? (y/n/f for force-with-lease): "
+
+    # Info
+    PUSHING_CHANGES = "Pushing changes..."
 
     # Success messages
     TEST_MODE_ACTIVE = "🧪 Running in test mode - no actual commits will be made"
     COMMIT_SUCCESS = "Commit successful! 🎉"
     TEST_SUCCESS = "✅ Test successful! This would have created a commit with message:"
     GENERATED_MESSAGE = "Generated commit message:"
+    PUSH_SUCCESS = "Changes pushed successfully!"
+
 
     # Error messages
     PROCESS_EXIT = "Process exited."
@@ -34,3 +41,4 @@ class Messages:
     UNEXPECTED_ERROR = "Unexpected error: {}"
     FORMAT_ERROR = "Error formatting message: {}"
     COMMIT_TYPE_ERROR = "Invalid commit type: {}"
+    PUSH_ERROR = "Error pushing changes: {}"
