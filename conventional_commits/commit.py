@@ -25,8 +25,14 @@ TEST_MODE = len(sys.argv) > 1 and sys.argv[1] == "testingthisPythonScript"
 
 def get_git_status() -> Tuple[List[str], bool]:
     result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
-    files = [line[3:] for line in result.stdout.splitlines()]
-    return files, bool(files)
+    # Get all unstaged files (including modified and untracked)
+    unstaged_files = []
+    for line in result.stdout.splitlines():
+        if line.startswith(' M') or line.startswith('MM') or line.startswith('??'):
+            unstaged_files.append(line[3:])
+    
+    has_changes = bool(unstaged_files)
+    return unstaged_files, not has_changes
 
 def select_files(files: List[str]) -> List[str]:
     print("\nAvailable files:")
