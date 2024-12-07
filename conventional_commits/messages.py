@@ -53,3 +53,6 @@ class Messages:
     EMOJI_REQUIRED = "Emoji must be a non-empty string"
     INVALID_COMMIT_TYPE = "Commit type contains invalid characters"
     FORMAT_ERROR = "Failed to format commit message: {}"
+
+    FINAL_STATUS_CHECK = "Final status check... 🕵️"
+    ALL_DONE = "All done! Time to celebrate! 🎉"

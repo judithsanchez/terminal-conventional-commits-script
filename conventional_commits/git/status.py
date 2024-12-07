@@ -2,6 +2,7 @@ import subprocess
 from typing import Tuple, List
 
 from conventional_commits.colors import Colors
+from conventional_commits.messages import Messages
 
 def get_git_status() -> Tuple[List[str], bool]:
     result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
@@ -18,6 +19,6 @@ def get_git_status() -> Tuple[List[str], bool]:
     return unstaged_files, staged_changes
 
 def show_final_status() -> None:
-    print("\n" + Colors.INFO + "Final status check... 🕵️")
+    print("\n" + Colors.INFO + Messages.FINAL_STATUS_CHECK)
     subprocess.run(["git", "status"], check=True)
-    print("\n" + Colors.SUCCESS + "All done! Time to grab a ☕ and celebrate! 🎉")
+    print("\n" + Colors.SUCCESS + Messages.ALL_DONE)
