@@ -5,19 +5,19 @@ import sys
 from colorama import init
 from typing import Optional, Dict, Any, Tuple, List
 
+from conventional_commits.exceptions.format_errors import MessageFormatError
+from conventional_commits.handlers.breaking_change_handler import get_breaking_change
+from conventional_commits.handlers.common import CommitInputError
+from conventional_commits.handlers.footer_handler import get_footer
+from conventional_commits.handlers.message_handler import get_message
+from conventional_commits.handlers.scope_handler import get_scope
+from conventional_commits.handlers.type_handler import get_commit_type
+
 from .colors import Colors
 from .config.config_manager import ConfigManager
 from .messages import Messages
 from conventional_commits.formatters.commit_formatter import format_commit_message
-from .input_handlers import (
-    print_divider,
-    get_commit_type,
-    get_scope,
-    get_message,
-    get_breaking_change,
-    get_footer,
-    CommitInputError
-)
+
 
 init(autoreset=True)
 
