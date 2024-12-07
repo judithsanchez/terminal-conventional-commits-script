@@ -1,9 +1,9 @@
 from typing import Dict, Any
-from handlers.type_handler import get_commit_type
-from handlers.scope_handler import get_scope
-from handlers.message_handler import get_message
-from handlers.breaking_change_handler import get_breaking_change
-from handlers.footer_handler import get_footer
+from ..handlers.type_handler import get_commit_type
+from ..handlers.scope_handler import get_scope
+from ..handlers.message_handler import get_message
+from ..handlers.breaking_change_handler import get_breaking_change
+from ..handlers.footer_handler import get_footer
 
 def create_commit():
     current_state: Dict[str, Any] = {

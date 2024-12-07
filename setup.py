@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "gcommit=conventional_commits.commit:main",
+            "gcommit=conventional_commits.app:main",
         ],
     },
     author="Your Name",
