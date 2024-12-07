@@ -10,7 +10,7 @@ def confirm_and_execute(formatted_message: str) -> None:
     while True:
         print("\nCommit message:")
         print(Colors.OUTPUT + formatted_message)
-        choice = input(Colors.INPUT + "Approve (y), Edit (e), or Cancel (n)? ").strip().lower()
+        choice = input(Colors.INPUT + "approve (y), edit (e), or cancel (c)? ").strip().lower()
         
         if choice == 'y':
             if execute_git_commit(formatted_message, TEST_MODE):

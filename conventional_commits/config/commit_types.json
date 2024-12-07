@@ -1,6 +1,5 @@
 {
     "defaultCommits": {
-        "feat": "\u2728",
         "wip": "\ud83d\udea7",
         "fix": "\ud83d\udc1b",
         "docs": "\ud83d\udcdd",
@@ -30,5 +29,8 @@
         "chore": "\ud83d\uddc3\ufe0f",
         "placeholder": "\ud83d\udea7"
     },
-    "customCommits": {}
+    "customCommits": {
+        "test1": "\ud83c\udf1f",
+        "test": "\ud83c\udfaf"
+    }
 }

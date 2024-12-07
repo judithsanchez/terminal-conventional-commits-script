@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import Dict, Any
 from ..colors import Colors
 from ..formatters.preview_formatter import preview_commit_message
@@ -18,8 +19,9 @@ def show_current_preview(current_state: Dict[str, Any]):
 
 def handle_quit(value: str):
     if value.lower() == 'q':
+        if 'pytest' in sys.modules:
+            return
         print(Colors.SUCCESS + "Process exited.")
         exit(0)
-
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')

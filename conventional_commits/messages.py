@@ -45,7 +45,7 @@ class Messages:
 
     NO_CHANGES = "🧹 Everything is squeaky clean! Nothing to commit here. Maybe it's time to write some code? 😉"
     STATUS_CHECK = "Checking git status..."
-    ADD_FILES_PROMPT = "Would you like to add files? (a for all, s for select, n to cancel): "
+    ADD_FILES_PROMPT = "Would you like to add files? (a for all, s for select, c to cancel): "
     SELECT_FILES = "Enter file numbers (comma-separated) to add: "
 
     COMMIT_TYPE_REQUIRED = "Commit type must be a non-empty string"

@@ -4,7 +4,6 @@ from conventional_commits.formatters.preview_formatter import preview_commit_mes
 from tests.test_fixtures import GARBAGE_VALUES
 from conventional_commits.messages import Messages
 
-# Basic formatting tests
 def test_format_commit_message_basic():
     result = format_commit_message(
         commit_type="feat",
@@ -43,7 +42,6 @@ def test_format_commit_message_different_types():
         )
         assert result == case["expected"]
 
-# Optional fields tests
 def test_format_commit_message_with_scope():
     result = format_commit_message(
         commit_type="fix",
