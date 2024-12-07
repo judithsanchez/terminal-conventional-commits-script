@@ -106,6 +106,11 @@ def execute_git_push(force: bool = False) -> bool:
         print(Colors.ERROR + Messages.PUSH_ERROR.format(str(e)))
         return False
 
+def show_final_status() -> None:
+    print("\n" + Colors.INFO + "Final status check... 🕵️")
+    subprocess.run(["git", "status"], check=True)
+    print("\n" + Colors.SUCCESS + "All done! Time to grab a ☕ and celebrate! 🎉")
+
 def confirm_and_execute(formatted_message: str) -> None:
     confirm = input(Colors.INPUT + Messages.CONFIRM_COMMIT).strip().lower()
     if confirm != 'y':
@@ -120,6 +125,7 @@ def confirm_and_execute(formatted_message: str) -> None:
             print(Colors.INFO + Messages.PUSHING_CHANGES)
             if execute_git_push(force=push_choice == 'f'):
                 print(Colors.SUCCESS + Messages.PUSH_SUCCESS)
+                show_final_status()
 
 def main() -> None:
     try:
