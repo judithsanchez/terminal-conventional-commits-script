@@ -125,8 +125,11 @@ def main() -> None:
         print(Colors.INFO + Messages.STATUS_CHECK)
         files, has_changes = get_git_status()
         
-        if not has_changes:
+        if not has_changes and not files:
             print(Colors.WARNING + Messages.NO_CHANGES)
+            return
+            
+        if not has_changes:
             if not handle_git_add(files):
                 return
 

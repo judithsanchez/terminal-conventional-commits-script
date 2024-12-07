@@ -1,6 +1,6 @@
 # Conventional Commits CLI
 
-Interactive command-line tool for creating conventional commits with emojis.
+Interactive command-line tool for creating fun conventional commits with emojis.
 
 ## Installation
 

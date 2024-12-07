@@ -22,7 +22,6 @@ class Messages:
     GENERATED_MESSAGE = "Generated commit message:"
     PUSH_SUCCESS = "Changes pushed successfully!"
 
-
     # Error messages
     PROCESS_EXIT = "Process exited."
     PROCESS_INTERRUPTED = "Process interrupted by user."
@@ -44,7 +43,7 @@ class Messages:
     COMMIT_TYPE_ERROR = "Invalid commit type: {}"
     PUSH_ERROR = "Error pushing changes: {}"
 
-    NO_CHANGES = "No files to commit. Add files first."
+    NO_CHANGES = "🧹 Everything is squeaky clean! Nothing to commit here. Maybe it's time to write some code? 😉"
     STATUS_CHECK = "Checking git status..."
     ADD_FILES_PROMPT = "Would you like to add files? (a for all, s for select, n to cancel): "
     SELECT_FILES = "Enter file numbers (comma-separated) to add: "
