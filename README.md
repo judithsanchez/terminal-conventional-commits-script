@@ -4,37 +4,76 @@ An interactive command-line tool for creating conventional commits with emojis.
 
 ## Installation
 
-```bash
-pip install conventional-commits
-```
+### Option 1: Using Virtual Environment (Recommended)
 
+1. Create virtual environment
 
-# Conventional Commits CLI
+python3 -m venv venv
 
-An interactive command-line tool for creating conventional commits with emojis.
+2. Activate virtual environment
 
-## Installation
+# On Linux/macOS:
 
-```bash
-pip install conventional-commits
+source venv/bin/activate
 
+# On Windows:
 
-# List all available commit types
+.\venv\Scripts\activate
+
+3. Install package
+
+pip install -e .
+
+### Option 2: Using pipx
+
+1. Install pipx if not installed
+
+# On Ubuntu/Debian:
+
+sudo apt update && sudo apt install pipx
+
+# On macOS:
+
+brew install pipx
+
+2. Install package
+
+pipx install conventional-commits
+
+## Usage
+
+### Configuration Commands
+
+#### List all available commit types
+
 python3 -m conventional_commits.config_cli list
 
-# Add a new commit type
+#### Add a new commit type
+
 python3 -m conventional_commits.config_cli add "deploy" "🚀"
 
-# Modify existing commit type
+#### Modify existing commit type
+
 python3 -m conventional_commits.config_cli modify "feat" "🌟"
 
-# Remove unused commit type
+#### Remove unused commit type
+
 python3 -m conventional_commits.config_cli remove "wip"
 
-# Reset to default types
+#### Reset to default types
+
 python3 -m conventional_commits.config_cli reset
 
+### Creating Commits
 
-python3 -m conventional_commits.commit testingthisPythonScript
+#### Basic Usage
 
+python3 -m conventional_commits.commit
 
+#### Help Command
+
+commit --help
+
+#### Test Mode
+
+python3 -m conventional_commits.commit --test
