@@ -47,3 +47,9 @@ class Messages:
     STATUS_CHECK = "Checking git status..."
     ADD_FILES_PROMPT = "Would you like to add files? (a for all, s for select, n to cancel): "
     SELECT_FILES = "Enter file numbers (comma-separated) to add: "
+
+    COMMIT_TYPE_REQUIRED = "Commit type must be a non-empty string"
+    MESSAGE_REQUIRED = "Message must be a non-empty string"
+    EMOJI_REQUIRED = "Emoji must be a non-empty string"
+    INVALID_COMMIT_TYPE = "Commit type contains invalid characters"
+    FORMAT_ERROR = "Failed to format commit message: {}"
