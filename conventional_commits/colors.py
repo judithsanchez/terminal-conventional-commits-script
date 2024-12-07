@@ -7,3 +7,5 @@ class Colors:
     ERROR = Fore.LIGHTRED_EX       # Pastel red for errors
     DIVIDER = Fore.LIGHTBLACK_EX   # Neutral gray for dividers
     OUTPUT = Fore.LIGHTWHITE_EX    # Light pinkish white for displayed results
+    INFO = Fore.CYAN
+    WARNING = Fore.YELLOW

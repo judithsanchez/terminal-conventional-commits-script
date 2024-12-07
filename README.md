@@ -76,4 +76,4 @@ commit --help
 
 #### Test Mode
 
-python3 -m conventional_commits.commit --test
+gcommit testingthisPythonScript

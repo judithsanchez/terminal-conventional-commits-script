@@ -3,12 +3,12 @@
 import subprocess
 import sys
 from colorama import init
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple, List
 
 from .colors import Colors
 from .config.config_manager import ConfigManager
 from .messages import Messages
-from .message_formatter import format_commit_message, MessageFormatError
+from .message_formatter import format_commit_message, MessageFormatError, preview_commit_message
 from .input_handlers import (
     print_divider,
     get_commit_type,
@@ -23,12 +23,45 @@ init(autoreset=True)
 
 TEST_MODE = len(sys.argv) > 1 and sys.argv[1] == "testingthisPythonScript"
 
-def execute_git_commit(commit_message: str) -> bool:
+def get_git_status() -> Tuple[List[str], bool]:
+    result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+    files = [line[3:] for line in result.stdout.splitlines()]
+    return files, bool(files)
+
+def select_files(files: List[str]) -> List[str]:
+    print("\nAvailable files:")
+    for i, file in enumerate(files, 1):
+        print(f"{i}. {file}")
+    
+    selection = input(Messages.SELECT_FILES).strip()
     try:
-        # Add all changes first
+        indices = [int(i.strip()) - 1 for i in selection.split(",")]
+        return [files[i] for i in indices if 0 <= i < len(files)]
+    except (ValueError, IndexError):
+        return []
+
+def handle_git_add(files: List[str]) -> bool:
+    if TEST_MODE:
+        print(Colors.SUCCESS + "TEST MODE: Would add files to git")
+        return True
+
+    choice = input(Messages.ADD_FILES_PROMPT).strip().lower()
+    if choice == 'a':
         subprocess.run(["git", "add", "."], check=True)
-        
-        # Then commit
+        return True
+    elif choice == 's':
+        selected = select_files(files)
+        if selected:
+            subprocess.run(["git", "add"] + selected, check=True)
+            return True
+    return False
+
+def execute_git_commit(commit_message: str) -> bool:
+    if TEST_MODE:
+        print(Colors.SUCCESS + Messages.TEST_MODE_MESSAGE.format(commit_message))
+        return True
+
+    try:
         result = subprocess.run(["git", "commit", "-m", commit_message], 
                               capture_output=True, 
                               text=True)
@@ -41,6 +74,10 @@ def execute_git_commit(commit_message: str) -> bool:
         return False
 
 def execute_git_push(force: bool = False) -> bool:
+    if TEST_MODE:
+        print(Colors.SUCCESS + "TEST MODE: Would execute git push" + (" --force-with-lease" if force else ""))
+        return True
+
     try:
         if force:
             result = subprocess.run(["git", "push", "--force-with-lease"], 
@@ -68,7 +105,6 @@ def confirm_and_execute(formatted_message: str) -> None:
     if execute_git_commit(formatted_message):
         print(Colors.SUCCESS + Messages.COMMIT_SUCCESS)
         
-        # Ask about pushing
         push_choice = input(Colors.INPUT + Messages.PUSH_PROMPT).strip().lower()
         if push_choice in ('y', 'f'):
             print(Colors.INFO + Messages.PUSHING_CHANGES)
@@ -79,6 +115,14 @@ def main() -> None:
     try:
         if TEST_MODE:
             print(Colors.SUCCESS + Messages.TEST_MODE_ACTIVE)
+
+        print(Colors.INFO + Messages.STATUS_CHECK)
+        files, has_changes = get_git_status()
+        
+        if not has_changes:
+            print(Colors.WARNING + Messages.NO_CHANGES)
+            if not handle_git_add(files):
+                return
 
         current_state: Dict[str, Any] = {
             'commit_type': '',
@@ -111,10 +155,6 @@ def main() -> None:
                 emoji=emoji
             )
 
-            if TEST_MODE:
-                print(Colors.SUCCESS + Messages.TEST_MODE_MESSAGE.format(formatted_message))
-                return
-
             confirm_and_execute(formatted_message)
 
         except MessageFormatError as e:
@@ -126,5 +166,6 @@ def main() -> None:
         print(Colors.WARNING + Messages.PROCESS_INTERRUPTED)
     except Exception as e:
         print(Colors.ERROR + Messages.UNEXPECTED_ERROR.format(str(e)))
+
 if __name__ == '__main__':
     main()

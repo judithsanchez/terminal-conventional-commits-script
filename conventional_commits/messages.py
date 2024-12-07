@@ -16,6 +16,7 @@ class Messages:
 
     # Success messages
     TEST_MODE_ACTIVE = "🧪 Running in test mode - no actual commits will be made"
+    TEST_MODE_MESSAGE = "TEST MODE: Commit message would have been:\n{}"    
     COMMIT_SUCCESS = "Commit successful! 🎉"
     TEST_SUCCESS = "✅ Test successful! This would have created a commit with message:"
     GENERATED_MESSAGE = "Generated commit message:"
@@ -42,3 +43,8 @@ class Messages:
     FORMAT_ERROR = "Error formatting message: {}"
     COMMIT_TYPE_ERROR = "Invalid commit type: {}"
     PUSH_ERROR = "Error pushing changes: {}"
+
+    NO_CHANGES = "No files to commit. Add files first."
+    STATUS_CHECK = "Checking git status..."
+    ADD_FILES_PROMPT = "Would you like to add files? (a for all, s for select, n to cancel): "
+    SELECT_FILES = "Enter file numbers (comma-separated) to add: "

@@ -23,6 +23,11 @@ def handle_quit(value: str):
         print(Colors.SUCCESS + "Process exited.")
         exit(0)
 
+import os
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def get_commit_type(current_state: Dict[str, Any]) -> str:
     try:
         config = ConfigManager()
@@ -33,8 +38,9 @@ def get_commit_type(current_state: Dict[str, Any]) -> str:
         current_page = 0
         
         while True:
+            clear_screen()  # Clear screen before showing new page
             print_divider()
-            print(Colors.PROMPT + "Select a commit type (or type 'q' to quit):")
+            print(Colors.PROMPT + Messages.COMMIT_TYPE_PROMPT)
             print_divider()
             
             start_idx = current_page * page_size
