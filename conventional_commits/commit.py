@@ -31,8 +31,12 @@ def get_git_status() -> Tuple[List[str], bool]:
         if line.startswith(' M') or line.startswith('MM') or line.startswith('??'):
             unstaged_files.append(line[3:])
     
-    has_changes = bool(unstaged_files)
-    return unstaged_files, not has_changes
+    staged_changes = any(
+        line for line in result.stdout.splitlines()
+        if line.startswith('M ') or line.startswith('A ')
+    )
+    
+    return unstaged_files, staged_changes
 
 def select_files(files: List[str]) -> List[str]:
     print("\nAvailable files:")
@@ -123,13 +127,13 @@ def main() -> None:
             print(Colors.SUCCESS + Messages.TEST_MODE_ACTIVE)
 
         print(Colors.INFO + Messages.STATUS_CHECK)
-        files, has_changes = get_git_status()
+        files, has_staged_changes = get_git_status()
         
-        if not has_changes and not files:
+        if not files and not has_staged_changes:
             print(Colors.WARNING + Messages.NO_CHANGES)
             return
             
-        if not has_changes:
+        if not has_staged_changes:
             if not handle_git_add(files):
                 return
 
