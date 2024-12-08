@@ -8,28 +8,10 @@ Welcome to the **Conventional Commits CLI**, an interactive and fun tool for cre
 - Easy configuration management 🛠️
 - Supports virtual environments and pipx for installation ✅
 
+
 ## 📦 Installation
 
-### Option 1: Using Virtual Environment (Recommended)
-1. **Create virtual environment**:
-    ```bash
-    python3 -m venv venv
-    ```
-2. **Activate virtual environment**:
-    - On Linux/macOS:
-      ```bash
-      source venv/bin/activate
-      ```
-    - On Windows:
-      ```bash
-      .\venv\Scripts\activate
-      ```
-3. **Install the package**:
-    ```bash
-    pip install -e .
-    ```
-
-### Option 2: Using pipx
+### Global Installation with pipx (Recommended)
 1. **Install pipx** (if not installed):
     - On Ubuntu/Debian:
       ```bash
@@ -39,10 +21,51 @@ Welcome to the **Conventional Commits CLI**, an interactive and fun tool for cre
       ```bash
       brew install pipx
       ```
-2. **Install the package**:
+    - On Windows:
+      ```bash
+      python -m pip install --user pipx
+      ```
+
+2. **Clone and Install**:
     ```bash
-    pipx install conventional-commits
+    # Clone repository
+    git clone https://github.com/yourusername/terminal-conventional-commits-script.git
+    
+    # Navigate to project directory
+    cd terminal-conventional-commits-script
+    
+    # Install globally with pipx
+    pipx install -e .
     ```
+
+3. **Verify Installation**:
+    ```bash
+    gcommit --help
+    ```
+
+After installation, you can use `gcommit` in any git repository on your system.s
+
+
+### Local Installation with Virtual Environment
+1. **Create and activate virtual environment**:
+    ```bash
+    # Create venv
+    python3 -m venv venv
+    
+    # Activate venv
+    # On Linux/macOS:
+    source venv/bin/activate
+    # On Windows:
+    .\venv\Scripts\activate
+    ```
+
+2. **Install locally**:
+    ```bash
+    pip install -e .
+    ```
+
+Note: With this option, `gcommit` will only work when the virtual environment is activated.
+
 
 ## 🛠️ Usage
 

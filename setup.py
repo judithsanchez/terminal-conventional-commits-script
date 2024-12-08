@@ -18,7 +18,7 @@ setup(
             "gcommit=conventional_commits.app:main",
         ],
     },
-    author="Your Name",
+    author="judithsanchez",
     description="Interactive conventional commits CLI tool with emojis",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
