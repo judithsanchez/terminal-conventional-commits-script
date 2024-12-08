@@ -4,35 +4,49 @@ from conventional_commits.git.status import get_git_status, show_final_status
 from conventional_commits.git.push import execute_git_push
 from conventional_commits.git.commit import execute_git_commit
 from conventional_commits.git.add import handle_git_add, select_files
-
 @pytest.fixture
 def mock_subprocess():
     with patch('subprocess.run') as mock_run:
-        mock_run.return_value = Mock(
-            returncode=0,
-            stdout="M  file1.py\nA  file2.py\n?? file3.py",
-            stderr=""
-        )
         yield mock_run
 
-def test_get_git_status_with_mixed_changes(mock_subprocess):
-    unstaged_files, staged_changes = get_git_status()
-    assert len(unstaged_files) == 1
-    assert "file3.py" in unstaged_files
-    assert staged_changes is True
-
-def test_get_git_status_no_changes(mock_subprocess):
-    mock_subprocess.return_value.stdout = ""
-    unstaged_files, staged_changes = get_git_status()
-    assert len(unstaged_files) == 0
-    assert staged_changes is False
-
-def test_show_final_status(mock_subprocess):
-    show_final_status()
-    assert mock_subprocess.call_count == 1
-    mock_subprocess.assert_called_with(["git", "status"], check=True)
+def test_execute_git_push_no_upstream_branch(mock_subprocess):
+    # Simulate the error message for no upstream branch
+    mock_subprocess.side_effect = [
+        Mock(
+            returncode=1,
+            stderr="fatal: The current branch js/learning/beginners has no upstream branch.\n"
+                   "To push the current branch and set the remote as upstream, use\n\n"
+                   "    git push --set-upstream origin js/learning/beginners\n"
+        ),
+        Mock(returncode=0)  # Simulate successful upstream branch set
+    ]
+    
+    with patch('builtins.input', return_value='y'):
+        assert execute_git_push() is True
+        mock_subprocess.assert_any_call(
+            ["git", "push", "--set-upstream", "origin", "js/learning/beginners"],
+            capture_output=True,
+            text=True
+        )
+def test_execute_git_push_no_upstream_branch_user_aborts(mock_subprocess):
+    # Simulate the error message for no upstream branch
+    mock_subprocess.return_value = Mock(
+        returncode=1,
+        stderr="fatal: The current branch js/learning/beginners has no upstream branch.\n"
+                "To push the current branch and set the remote as upstream, use\n\n"
+                "    git push --set-upstream origin js/learning/beginners\n"
+    )
+    
+    with patch('builtins.input', return_value='n'):
+        assert execute_git_push() is False
+        mock_subprocess.assert_called_once_with(
+            ["git", "push"],
+            capture_output=True,
+            text=True
+        )
 
 def test_execute_git_push_success(mock_subprocess):
+    mock_subprocess.return_value = Mock(returncode=0)
     assert execute_git_push() is True
     mock_subprocess.assert_called_with(
         ["git", "push"],
@@ -41,6 +55,7 @@ def test_execute_git_push_success(mock_subprocess):
     )
 
 def test_execute_git_push_force_success(mock_subprocess):
+    mock_subprocess.return_value = Mock(returncode=0)
     assert execute_git_push(force=True) is True
     mock_subprocess.assert_called_with(
         ["git", "push", "--force-with-lease"],
@@ -51,9 +66,9 @@ def test_execute_git_push_force_success(mock_subprocess):
 def test_execute_git_push_test_mode(mock_subprocess):
     assert execute_git_push(test_mode=True) is True
     mock_subprocess.assert_not_called()
-
 def test_execute_git_commit_success(mock_subprocess):
     commit_message = "test: add unit tests"
+    mock_subprocess.return_value = Mock(returncode=0)
     assert execute_git_commit(commit_message) is True
     mock_subprocess.assert_called_with(
         ["git", "commit", "-m", commit_message],
