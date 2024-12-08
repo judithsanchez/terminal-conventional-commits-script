@@ -22,7 +22,16 @@ def execute_git_push(force: bool = False, test_mode: bool = False) -> bool:
                 print(Colors.ERROR + Messages.ERROR_PUSHING_CHANGES.format(result.stderr))
                 user_input = input(Messages.SET_UPSTREAM_PROMPT).strip().lower()
                 if user_input == 'y':
-                    branch_name = result.stderr.split()[-1]  
+                    # Correctly extract the branch name from the error message
+                    lines = result.stderr.splitlines()
+                    for line in lines:
+                        if "git push --set-upstream" in line:
+                            branch_name = line.split()[-1]
+                            break
+                    else:
+                        print(Colors.ERROR + "Failed to extract branch name.")
+                        return False
+
                     set_upstream_result = subprocess.run(
                         ["git", "push", "--set-upstream", "origin", branch_name],
                         capture_output=True,
