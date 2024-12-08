@@ -60,5 +60,6 @@ class Messages:
     TEST_MODE_PUSH = "TEST MODE: Would execute git push"
     ERROR_PUSHING_CHANGES = "Error pushing changes: {}"
     SET_UPSTREAM_PROMPT = "Would you like to set the upstream branch and push? (y/n): "
+    FAILED_TO_EXTRACT_BRANCH = "Failed to extract branch name."
     BRANCH_SET_SUCCESS = "Branch set and pushed successfully!"
     PUSH_ABORTED = "Push aborted by user."
