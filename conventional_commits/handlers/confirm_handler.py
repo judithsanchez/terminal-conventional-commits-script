@@ -2,6 +2,7 @@ from conventional_commits.colors import Colors
 from conventional_commits.config.settings import TEST_MODE
 from conventional_commits.git.commit import execute_git_commit
 from conventional_commits.git.push import execute_git_push
+from conventional_commits.git.reset import unstage_all_files
 from conventional_commits.git.status import show_final_status
 from conventional_commits.messages import Messages
 
@@ -30,4 +31,5 @@ def confirm_and_execute(formatted_message: str) -> None:
             continue
         else:
             print(Colors.WARNING + Messages.PROCESS_INTERRUPTED)
+            unstage_all_files()
             break
