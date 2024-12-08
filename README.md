@@ -1,4 +1,4 @@
-# 🚀 Conventional Commits CLI
+# 🚀 Conventional Commits CLI 🚀
 
 Welcome to the **Conventional Commits CLI**, an interactive and fun tool for creating conventional commits with ease! 🎉 Say goodbye to boring commit messages and hello to emojis and structured messages! 😎
 
