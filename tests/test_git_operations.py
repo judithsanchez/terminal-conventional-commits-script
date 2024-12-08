@@ -152,3 +152,28 @@ def test_unstage_all_files_success(mock_subprocess):
     mock_subprocess.return_value = Mock(returncode=0)
     unstage_all_files()
     mock_subprocess.assert_called_once()
+
+def test_get_git_status_unstaged_files(mock_subprocess):
+    mock_subprocess.return_value = Mock(
+        stdout=" M file1.py\n?? file2.py\n D file3.py\nMM file4.py",
+        returncode=0
+    )
+    unstaged, staged = get_git_status()
+    assert unstaged == ["file1.py", "file2.py", "file3.py", "file4.py"]
+    assert staged is False
+
+def test_get_git_status_staged_files(mock_subprocess):
+    mock_subprocess.return_value = Mock(
+        stdout="M  file1.py\nA  file2.py\nD  file3.py",
+        returncode=0
+    )
+    unstaged, staged = get_git_status()
+    assert unstaged == []
+    assert staged is True
+
+def test_show_final_status(mock_subprocess):
+    show_final_status()
+    mock_subprocess.assert_called_with(
+        ["git", "status"],
+        check=True
+    )

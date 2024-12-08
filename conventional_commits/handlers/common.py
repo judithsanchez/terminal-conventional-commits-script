@@ -1,6 +1,8 @@
 import os
 import sys
 from typing import Dict, Any
+
+from conventional_commits.git.reset import unstage_all_files
 from ..colors import Colors
 from ..formatters.preview_formatter import preview_commit_message
 
@@ -19,6 +21,7 @@ def show_current_preview(current_state: Dict[str, Any]):
 
 def handle_quit(value: str):
     if value.lower() == 'q':
+        unstage_all_files()
         if 'pytest' in sys.modules:
             return
         print(Colors.SUCCESS + "Process exited.")
