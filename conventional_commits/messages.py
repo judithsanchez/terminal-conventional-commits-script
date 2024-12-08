@@ -56,3 +56,9 @@ class Messages:
 
     FINAL_STATUS_CHECK = "Final status check... 🕵️"
     ALL_DONE = "All done! Time to celebrate! 🎉"
+
+    TEST_MODE_PUSH = "TEST MODE: Would execute git push"
+    ERROR_PUSHING_CHANGES = "Error pushing changes: {}"
+    SET_UPSTREAM_PROMPT = "Would you like to set the upstream branch and push? (y/n): "
+    BRANCH_SET_SUCCESS = "Branch set and pushed successfully!"
+    PUSH_ABORTED = "Push aborted by user."
