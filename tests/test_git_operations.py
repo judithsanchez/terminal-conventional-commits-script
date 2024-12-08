@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import patch, Mock, call
+from conventional_commits.git.reset import unstage_all_files
 from conventional_commits.git.status import get_git_status, show_final_status
 from conventional_commits.git.push import execute_git_push
 from conventional_commits.git.commit import execute_git_commit
@@ -138,3 +139,16 @@ def test_select_files_out_of_range():
     with patch('builtins.input', return_value="1,4"):
         selected = select_files(files)
         assert selected == ["file1.py"]
+
+def test_unstage_all_files(mock_subprocess):
+    unstage_all_files()
+    mock_subprocess.assert_called_with(
+        ["git", "reset", "HEAD"],
+        capture_output=True,
+        text=True
+    )
+
+def test_unstage_all_files_success(mock_subprocess):
+    mock_subprocess.return_value = Mock(returncode=0)
+    unstage_all_files()
+    mock_subprocess.assert_called_once()
